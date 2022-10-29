@@ -75,9 +75,12 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($nik)
     {
-        //
+        return view('karyawan.edit')->with([
+            'karyawan' => Karyawan::find($nik),
+            'departement' => Departement::all(),
+        ]);
     }
 
     /**
@@ -87,19 +90,35 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $nik)
     {
-        //
+        $request->validate([
+            'nik'           => 'required',
+            'nama'          => 'required',
+            'jabatan'       => 'required',
+            'id_departement' => 'required',
+        ]);
+        $save = Karyawan::find($nik);
+        $save->nik              = $request->nik;
+        $save->nama             = $request->nama;
+        $save->jabatan          = $request->jabatan;
+        $save->id_departement   = $request->id_departement;
+        $save->save();
+
+        return to_route('karyawan.index')->with('success', 'Data Berhasil di Ubah');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $nik
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($nik)
     {
-        //
+        $karyawan = Karyawan::find($nik);
+        $karyawan->delete();
+
+        return back()->with('success', 'Data Berhasil di Hapus!.');
     }
 }

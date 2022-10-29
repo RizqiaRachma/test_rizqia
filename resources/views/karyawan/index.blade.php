@@ -14,6 +14,11 @@
                         <a href="{{ route('karyawan.create') }}"><button type="button" class="btn btn-primary">Tambah Karyawan</button></a>
                         </div>
                         <br>
+                        @if (session('success'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('success')}}
+                        </div>
+                        @endif
                         <table id="example" class="table table-striped" >
                             <thead>
                             <tr>
@@ -32,8 +37,11 @@
                                     <td>{{ $u->jabatan }}</td>
                                     <td>{{ $u->nama_departement }}</td>
                                     <td> 
-                                        <a href="" class="btn btn-success btn-sm">Edit</a>
-                                        <a href="" class="btn btn-danger btn-sm">Edit</a>
+                                       <form action="{{ route('karyawan.destroy', $u->nik) }}" method="POST">
+                                        @csrf 
+                                        @method('delete')
+                                        <a href="{{ route('karyawan.edit', $u->nik) }}" class="btn btn-success btn-sm">Edit</a>
+                                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
                                     </td>
                                 </tr>                                    
                                 @endforeach

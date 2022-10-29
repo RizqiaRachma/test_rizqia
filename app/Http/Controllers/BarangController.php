@@ -23,6 +23,7 @@ class BarangController extends Controller
             ->join('kategori_barang', 'kategori_barang.id', '=', 'daftar_barang.id_kategori')
             ->join('satuan', 'satuan.id', '=', 'daftar_barang.id_satuan')
             ->join('lokasi', 'lokasi.id', '=', 'daftar_barang.id_lokasi')
+            ->select('daftar_barang.id as id_barang', 'daftar_barang.nama_barang', 'daftar_barang.qty', 'kategori_barang.kategori', 'satuan.satuan', 'lokasi.lokasi')
             ->get();
         return view('barang.index')->with('data', $data);
     }
@@ -81,9 +82,21 @@ class BarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id_barang)
     {
-        //
+        $data = DB::table('daftar_barang')
+            ->join('kategori_barang', 'kategori_barang.id', '=', 'daftar_barang.id_kategori')
+            ->join('satuan', 'satuan.id', '=', 'daftar_barang.id_satuan')
+            ->join('lokasi', 'lokasi.id', '=', 'daftar_barang.id_lokasi')
+            ->select('daftar_barang.id as id_barang', 'daftar_barang.nama_barang', 'daftar_barang.qty', 'daftar_barang.id_kategori', 'daftar_barang.id_satuan', 'daftar_barang.id_lokasi')
+            ->get();
+
+        return view('barang.edit')->with([
+            'daftar_barang'     => daftar_barang::find($id_barang),
+            'satuan'            => Satuan::all(),
+            'lokasi'            => Lokasi::all(),
+            'kategori_barang'   => Kategori_barang::all(),
+        ], $data);
     }
 
     /**
@@ -95,7 +108,18 @@ class BarangController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'nama_barang'           => 'required|unique:daftar_barang',
+        ]);
+        $save = daftar_barang::find($id);
+        $save->nama_barang         = $request->nama_barang;
+        $save->id_kategori         = $request->id_kategori;
+        $save->id_lokasi           = $request->id_lokasi;
+        $save->qty                 = $request->qty;
+        $save->id_satuan           = $request->id_satuan;
+        $save->save();
+
+        return to_route('barang.index')->with('success', 'Data Berhasil di Tambahkan');
     }
 
     /**
@@ -106,6 +130,9 @@ class BarangController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = daftar_barang::find($id);
+        $data->delete();
+
+        return back()->with('success', 'Data Berhasil di Hapus!.');
     }
 }
