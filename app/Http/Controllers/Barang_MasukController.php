@@ -57,6 +57,13 @@ class Barang_MasukController extends Controller
         $save->stok_masuk          = $request->stok_masuk;
         $save->save();
 
+        $barang = daftar_barang::find(
+            $request->id_barang
+        );
+
+        $barang->qty += $request->stok_masuk;
+        $barang->save();
+
         return to_route('barang_masuk.index')->with('success', 'Data Berhasil di Tambahkan');
     }
 

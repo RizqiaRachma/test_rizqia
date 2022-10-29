@@ -17,7 +17,6 @@
                         <table id="example" class="table table-striped" >
                             <thead>
                             <tr>
-                                <td>ID</td>
                                 <td>TANGGAL</td>
                                 <td>NAMA</td>
                                 <td>SUPPLIER</td>
@@ -28,7 +27,6 @@
                             <tbody>
                                 @foreach ($data as $u)
                                 <tr>
-                                    <td>{{ $u->id }}</td>
                                     <td>{{ $u->tgl_masuk }}</td>
                                     <td>{{ $u->nama_barang }}</td>
                                     <td>{{ $u->supplier }}</td>
