@@ -12,13 +12,13 @@
                 <div class="card-body">
                     
                         <div class="col-md-10">
-                            <form action="{{ route('barang.update') }}" method="POST" >
-                            @csrf
+                            <form action="{{ route('barang.update', $daftar_barang->id) }}" method="POST" >
+                            @csrf 
                             @method('PUT')
                             <div class="row mb-3">
-                                <label for="nama" class="col-md-4 col-form-label text-md-end">{{ __('Nama Barang') }}</label>
+                                <label for="nama_barang" class="col-md-4 col-form-label text-md-end">{{ __('Nama Barang') }}</label>
                                 <div class="col-md-6">
-                                    <input id="nama" type="text" class="form-control @error('nama') is-invalid @enderror" name="nama_barang" value="{{ $daftar_barang->nama_barang }}" required autocomplete="nama_barang" autofocus>
+                                    <input id="nama_barang" type="text" class="form-control @error('nama_barang') is-invalid @enderror" name="nama_barang" value="{{ $daftar_barang->nama_barang }}" required autocomplete="nama_barang" autofocus>
 
 										@error('nama_barang')
 											<span class="invalid-feedback" role="alert">

@@ -20,6 +20,7 @@ class Barang_MasukController extends Controller
         $data = DB::table('barang_masuk')
             ->join('daftar_barang', 'daftar_barang.id', '=', 'barang_masuk.id_barang')
             ->join('supplier', 'supplier.id', '=', 'barang_masuk.id_supplier')
+            ->select('barang_masuk.id as id_masuk', 'barang_masuk.stok_masuk', 'barang_masuk.tgl_masuk', 'daftar_barang.nama_barang', 'supplier.supplier')
             ->get();
         return view('barang_masuk.index')->with('data', $data);
     }
@@ -109,6 +110,16 @@ class Barang_MasukController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Barang_masuk::find($id);
+        $data->delete();
+
+        $barang = daftar_barang::find(
+            $data->id_barang
+        );
+
+        $barang->qty -= $data->stok_masuk;
+        $barang->save();
+
+        return back()->with('success', 'Data Berhasil di Hapus!.');
     }
 }

@@ -82,21 +82,16 @@ class BarangController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id_barang)
+    public function edit($id)
     {
-        $data = DB::table('daftar_barang')
-            ->join('kategori_barang', 'kategori_barang.id', '=', 'daftar_barang.id_kategori')
-            ->join('satuan', 'satuan.id', '=', 'daftar_barang.id_satuan')
-            ->join('lokasi', 'lokasi.id', '=', 'daftar_barang.id_lokasi')
-            ->select('daftar_barang.id as id_barang', 'daftar_barang.nama_barang', 'daftar_barang.qty', 'daftar_barang.id_kategori', 'daftar_barang.id_satuan', 'daftar_barang.id_lokasi')
-            ->get();
+
 
         return view('barang.edit')->with([
-            'daftar_barang'     => daftar_barang::find($id_barang),
+            'daftar_barang'     => daftar_barang::find($id),
             'satuan'            => Satuan::all(),
             'lokasi'            => Lokasi::all(),
             'kategori_barang'   => Kategori_barang::all(),
-        ], $data);
+        ]);
     }
 
     /**
